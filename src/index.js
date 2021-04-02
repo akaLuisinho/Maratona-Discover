@@ -9,6 +9,6 @@ server.set('view engine', 'ejs')
 
 server.use(routes)
 
-server.listen(3000, () => {
+server.listen(3300, () => {
   console.log('rodando')
 })
