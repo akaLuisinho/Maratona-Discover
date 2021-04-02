@@ -16,6 +16,25 @@ const Profile = {
   controllers: {
     index(req, res) {
       return res.render(views + 'profile', { profile: Profile.data })
+    },
+    update(req, res) {
+      const data = req.body
+
+      const weeksPerYear = 52
+      const weeksPerMonth = (weeksPerYear - data['vacation-per-year']) / 12
+
+      //total de horas na semana
+      const weekTotalHours = data['hours-per-day'] * data['days-per-week']
+      const monthlyTotalHours = weekTotalHours * weeksPerMonth
+
+      const valueHour = data['monthly-budget'] / monthlyTotalHours
+
+      Profile.data = {
+        ...Profile.data,
+        ...req.body,
+        'value-hour': valueHour
+      }
+      return res.redirect('/profile')
     }
   }
 }
@@ -43,7 +62,6 @@ const Jobs = {
         const remaining = Jobs.services.remainingDays(job)
         const status = remaining <= 0 ? 'done' : 'progress'
         const budget = Profile.data['value-hour'] * job['total-hours']
-        console.log(status)
         return {
           ...job,
           remaining,
@@ -87,5 +105,6 @@ routes.get('/job', (req, res) => res.render(views + '/job'))
 routes.post('/job', Jobs.controllers.createJob)
 routes.get('/job/edit', (req, res) => res.render(views + '/job-edit'))
 routes.get('/profile', Profile.controllers.index)
+routes.post('/profile', Profile.controllers.update)
 
 module.exports = routes
