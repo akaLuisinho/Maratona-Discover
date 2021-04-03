@@ -118,6 +118,12 @@ const Jobs = {
         return job
       })
       res.redirect('/job/' + jobId)
+    },
+    delete(req, res) {
+      const jobId = req.params.id
+
+      Jobs.data = Jobs.data.filter(job => { job.id !== jobId })
+      return res.redirect('/')
     }
   },
   services: {
@@ -144,6 +150,7 @@ routes.get('/job', Jobs.controllers.create)
 routes.post('/job', Jobs.controllers.save)
 routes.get('/job/:id', Jobs.controllers.show)
 routes.post('/job/:id', Jobs.controllers.update)
+routes.post('/job/delete/:id', Jobs.controllers.delete)
 routes.get('/profile', Profile.controllers.index)
 routes.post('/profile', Profile.controllers.update)
 
