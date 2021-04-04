@@ -1,4 +1,3 @@
-const { update } = require("../controllers/profileController")
 
 let data = {
     name: 'Luís',

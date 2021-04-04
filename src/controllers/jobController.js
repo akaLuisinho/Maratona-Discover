@@ -1,14 +1,12 @@
-const Jobs = require('../model/job')
-
-
-
+const Job = require('../model/job')
+const JobUtils = require('../utils/jobUtils')
 
 module.exports = {
     index(req, res) {
-        const upatatedJobs = Jobs.data.map((job) => {
-            const remaining = Jobs.services.remainingDays(job)
+        const upatatedJobs = Job.get().map((job) => {
+            const remaining = JobUtils.remainingDays(job)
             const status = remaining <= 0 ? 'done' : 'progress'
-            const budget = Jobs.services.calculateBudget(job)
+            const budget = JobUtils.calculateBudget(job)
             return {
                 ...job,
                 remaining,
@@ -22,9 +20,9 @@ module.exports = {
         return res.render('job')
     },
     save(req, res) {
-        const lastId = Jobs.data[Jobs.data.length - 1]?.id || 1
+        const lastId = Job.get()[Job.get().length - 1]?.id || 0
 
-        Jobs.data.push({
+        Job.get().push({
             id: lastId + 1,
             name: req.body.name,
             'daily-hours': req.body['daily-hours'],
@@ -34,9 +32,9 @@ module.exports = {
         return res.redirect('/')
     },
     show(req, res) {
-        jobId = req.params.id
-        const job = Jobs.data.find(j => j.id == jobId)
-        job.budget = Jobs.services.calculateBudget(job)
+        const jobId = req.params.id
+        const job = Job.get().find(j => j.id == jobId)
+        job.budget = JobUtils.calculateBudget(job)
 
         if (!job) {
             return res.send('Job Not Found!')
@@ -44,9 +42,9 @@ module.exports = {
         return res.render('job-edit', { job })
     },
     update(req, res) {
-        jobId = req.params.id
-        const job = Jobs.data.find(j => j.id == jobId)
-        job.budget = Jobs.services.calculateBudget(job)
+        const jobId = req.params.id
+        const job = Job.get().find(j => j.id == jobId)
+        job.budget = JobUtils.calculateBudget(job)
 
         if (!job) {
             return res.send('Job Not Found!')
@@ -58,18 +56,21 @@ module.exports = {
             'daily-hours': req.body['daily-hours']
         }
 
-        Jobs.data = Jobs.data.map(job => {
+        const updateJob = Job.get().map(job => {
             if (jobId == job.id) {
                 job = updatedJob
             }
             return job
+
         })
-        res.redirect('job/' + jobId)
+        Job.update(updateJob)
+        res.redirect(jobId)
     },
     delete(req, res) {
         const jobId = req.params.id
 
-        Jobs.data = Jobs.data.filter(job => { job.id !== jobId })
+        Job.delete(jobId)
+
         return res.redirect('/')
     }
 }
