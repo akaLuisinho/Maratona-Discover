@@ -12,7 +12,7 @@ module.exports = {
 
         let jobTotalHours = 0
 
-        const upatatedJobs = Job.get().map((job) => {
+        const updatedJobs = Job.get().map((job) => {
             const remaining = JobUtils.remainingDays(job)
             const status = remaining <= 0 ? 'done' : 'progress'
             const budget = JobUtils.calculateBudget(job)
@@ -31,6 +31,6 @@ module.exports = {
 
         const freeHours = Profile.get()['hours-per-day'] - jobTotalHours
 
-        return res.render('index', { upatatedJobs, profile: Profile.get(), status: statusCount, freeHours })
+        return res.render('index', { updatedJobs, profile: Profile.get(), status: statusCount, freeHours })
     }
 }

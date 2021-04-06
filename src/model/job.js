@@ -1,3 +1,5 @@
+const { create } = require("../controllers/jobController")
+
 let data = [
     {
         id: 1,
@@ -24,5 +26,8 @@ module.exports = {
     },
     delete(id) {
         data = data.filter(job => job.id !== id)
+    },
+    create(newJob) {
+        data.push(newJob)
     }
 }
