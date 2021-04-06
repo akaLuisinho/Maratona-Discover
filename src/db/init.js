@@ -16,7 +16,7 @@ Database.exec(
 )
 Database.exec(
     `CREATE TABLE jobs(
-        cpf INT PRIMARY KEY AUTOINCREMENT,
+        id INT PRIMARY KEY AUTOINCREMENT,
         name TEXT,
         daily_hours INT,
         total_hours INT,
@@ -24,6 +24,48 @@ Database.exec(
     )`
 )
 
-Database.run()
+Database.run(
+    `INSERT INTO profile(
+        name,
+        avatar,
+        monthly_budget,
+        days_per_week,
+        hours_per_day,
+        vacation_per_year,
+    ) VALUES(
+        "luis",
+        "ttps://avatars.githubusercontent.com/u/75910800?v=4",
+        3000,
+        5,
+        5,
+        4
+    )`
+)
 
+Database.run(
+    `INSERT INTO Jobs(
+        name,
+        daily_hours,
+        total_hours,
+        created_at
+    ) VALUES(
+        "Pizzaria Guloso",
+        2,
+        1,
+        1617514376018
+    )`
+)
+Database.run(
+    `INSERT INTO Jobs(
+        name,
+        daily_hours,
+        total_hours,
+        created_at
+    ) VALUES(
+        "One Two Project",
+        3,
+        47,
+        1617514376018
+    )`
+)
 Database.close()
