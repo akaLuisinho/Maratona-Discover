@@ -1,10 +1,12 @@
-const Database = require('config')
+const Database = require('./config')
 
-Database()
+const initDb = {
+    async init() {
+        const db = await Database()
 
-Database.exec(
-    `CREATE TABLE profile(
-        cpf INT PRIMARY KEY AUTOINCREMENT,
+        await db.exec(
+            `CREATE TABLE profile(
+        cpf INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
         avatar TEXT,
         monthly_budget INT,
@@ -13,25 +15,25 @@ Database.exec(
         vacation_per_year INT,
         value_hour INT
     )`
-)
-Database.exec(
-    `CREATE TABLE jobs(
-        id INT PRIMARY KEY AUTOINCREMENT,
+        )
+        await db.exec(
+            `CREATE TABLE jobs(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
         daily_hours INT,
         total_hours INT,
         created_at DATETIME
     )`
-)
+        )
 
-Database.run(
-    `INSERT INTO profile(
+        await db.run(
+            `INSERT INTO profile(
         name,
         avatar,
         monthly_budget,
         days_per_week,
         hours_per_day,
-        vacation_per_year,
+        vacation_per_year
     ) VALUES(
         "luis",
         "ttps://avatars.githubusercontent.com/u/75910800?v=4",
@@ -40,10 +42,10 @@ Database.run(
         5,
         4
     )`
-)
+        )
 
-Database.run(
-    `INSERT INTO Jobs(
+        await db.run(
+            `INSERT INTO Jobs(
         name,
         daily_hours,
         total_hours,
@@ -54,9 +56,9 @@ Database.run(
         1,
         1617514376018
     )`
-)
-Database.run(
-    `INSERT INTO Jobs(
+        )
+        await db.run(
+            `INSERT INTO Jobs(
         name,
         daily_hours,
         total_hours,
@@ -67,5 +69,9 @@ Database.run(
         47,
         1617514376018
     )`
-)
-Database.close()
+        )
+        await db.close()
+    }
+}
+
+initDb.init()
