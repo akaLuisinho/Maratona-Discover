@@ -1,5 +1,3 @@
-const { create } = require("../controllers/jobController")
-
 let data = [
     {
         id: 1,
