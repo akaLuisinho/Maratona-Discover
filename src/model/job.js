@@ -1,22 +1,5 @@
 const Database = require('../db/config')
 
-//let data = [
-//    {
-//        id: 1,
-//        name: 'Pizzaria Guloso',
-//        'daily-hours': 2,
-//        'total-hours': 6,
-//        created_at: Date.now(),
-//    },
-//    {
-//        id: 2,
-//        name: 'One Two Project',
-//        'daily-hours': 3,
-//        'total-hours': 47,
-//        created_at: Date.now(),
-//    }
-//]
-
 module.exports = {
     async get() {
 
@@ -36,10 +19,29 @@ module.exports = {
     update(newData) {
         data = newData
     },
-    delete(id) {
-        data = data.filter(job => job.id !== id)
+    async delete(id) {
+        db = await Database()
+
+        await db.run(`DELETE FROM jobs WHERE id = ${id}`)
+        
+        db.close()
     },
-    create(newJob) {
-        data.push(newJob)
+    async create(newJob) {
+        db = await Database()
+
+        await db.run(`INSERT INTO jobs 
+        (
+        name,
+        daily_hours,
+        total_hours,
+        created_at
+        ) VALUES (
+            "${newJob.name}",
+            ${newJob['daily-hours']},
+            ${newJob['total-hours']},
+            ${newJob.created_at}
+        )`)
+        
+        await db.close()
     }
 }

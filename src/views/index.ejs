@@ -116,7 +116,7 @@
               <a href="/job/<%= job.id %> " class="button white edit" title="Editar Job">
                 <img src="/images/edit-24.svg" alt="Editar Job" />
               </a>
-              <button class="delete button white" title="Excluir Job">
+              <button class="delete button white" title="Excluir Job" form="delete-job">
                 <img src="/images/trash-24.svg" alt="Excluir Job" />
               </button>
             </div>
@@ -144,7 +144,7 @@
         </button>
       </footer>
     </div>
-    <form method="post" action="/job/delete" id="delete-job"></form>
+    <form method="post" action="/job/:id" id="delete-job"></form>
   </div>
   <!-- end modal-wrapper -->
 </body>

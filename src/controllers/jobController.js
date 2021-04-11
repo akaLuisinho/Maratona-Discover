@@ -8,10 +8,8 @@ module.exports = {
     },
     async save(req, res) {
         const Jobs = await Job.get()
-        const lastId = Jobs[Jobs.length - 1]?.id || 0
 
-        Job.create({
-            id: lastId + 1,
+        await Job.create({
             name: req.body.name,
             'daily-hours': req.body['daily-hours'],
             'total-hours': req.body['total-hours'],
@@ -23,6 +21,7 @@ module.exports = {
     async show(req, res) {
         const profileData = await Profile.get()
         const Jobs = await Job.get()
+        
         const jobId = req.params.id
         const job = Jobs.find(j => j.id == jobId)
         job.budget = JobUtils.calculateBudget(job['total-hours'], profileData['value-hour'])
@@ -58,10 +57,10 @@ module.exports = {
         Job.update(updateJob)
         res.redirect(jobId)
     },
-    delete(req, res) {
+    async delete(req, res) {
         const jobId = req.params.id
 
-        Job.delete(jobId)
+        await Job.delete(jobId)
 
         return res.redirect('/')
     }
