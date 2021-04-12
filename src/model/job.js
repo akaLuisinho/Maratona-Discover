@@ -16,8 +16,18 @@ module.exports = {
             created_at: job.created_at
         }))
     },
-    update(newData) {
-        data = newData
+    async update(updatedJob, id) {
+        db = await Database()
+        db.run(`UPDATE jobs SET(
+            name,
+            daily_hours,
+            total_hours,
+        ) VALUES(
+            "${updatedJob.name}",
+            ${updatedJob['daily-hours']},
+            ${updatedJob['total-hours']},
+        ) WHERE id = ${id}` )
+        db.close()
     },
     async delete(id) {
         db = await Database()
