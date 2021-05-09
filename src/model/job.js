@@ -10,6 +10,7 @@ module.exports = {
         await db.close()
 
         return data.map((job) => ({
+            id: job.id,
             name: job.name,
             'daily-hours': job.daily_hours,
             'total-hours': job.total_hours,
@@ -18,23 +19,21 @@ module.exports = {
     },
     async update(updatedJob, id) {
         db = await Database()
-        db.run(`UPDATE jobs SET(
-            name,
-            daily_hours,
-            total_hours,
-        ) VALUES(
-            "${updatedJob.name}",
-            ${updatedJob['daily-hours']},
-            ${updatedJob['total-hours']},
-        ) WHERE id = ${id}` )
+
+        await db.run(`UPDATE jobs SET
+            name = "${updatedJob.name}",
+            daily_hours = ${updatedJob['daily-hours']},
+            total_hours = ${updatedJob['total-hours']}
+            WHERE id = ${id}`)
+
         db.close()
     },
     async delete(id) {
         db = await Database()
 
         await db.run(`DELETE FROM jobs WHERE id = ${id}`)
-        
-        db.close()
+
+        await db.close()
     },
     async create(newJob) {
         db = await Database()
@@ -51,7 +50,7 @@ module.exports = {
             ${newJob['total-hours']},
             ${newJob.created_at}
         )`)
-        
+
         await db.close()
     }
 }

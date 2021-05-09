@@ -113,10 +113,11 @@
             </div>
             <div class="actions column flex">
               <p class="sr-only">Ações</p>
-              <a href="/job/<%= job.id %> " class="button white edit" title="Editar Job">
+              <a href="/job/<%= job.id %>" class="button white edit" title="Editar Job">
                 <img src="/images/edit-24.svg" alt="Editar Job" />
               </a>
               <button class="delete button white" title="Excluir Job" form="delete-job">
+                <form method="post" action="/job/delete/<%= job.id %> " id="delete-job"></form>
                 <img src="/images/trash-24.svg" alt="Excluir Job" />
               </button>
             </div>
@@ -144,7 +145,6 @@
         </button>
       </footer>
     </div>
-    <form method="post" action="/job/:id" id="delete-job"></form>
   </div>
   <!-- end modal-wrapper -->
 </body>
