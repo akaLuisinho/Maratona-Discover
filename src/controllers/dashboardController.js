@@ -11,18 +11,21 @@ module.exports = {
         let statusCount = {
             total: Jobs.length,
             progress: 0,
-            done: 0
+            done: 0,
+            freeHours: 0
         }
 
         let jobTotalHours = 0
-
+        
         const updatedJobs = Jobs.map((job) => {
             const remaining = JobUtils.remainingDays(job)
-            const status = remaining <= 0 ? 'done' : 'progress'
             const budget = JobUtils.calculateBudget(job['total-hours'], profileData['value-hour'])
-            statusCount[status] += 1
-
+            
+            statusCount.freeHours = profileData['hours-per-day'] - jobTotalHours
+            const status = remaining <= 0 ? 'done' : 'progress'
             status == 'progress' ? jobTotalHours += job['daily-hours'] : jobTotalHours
+            statusCount[status] += 1
+            
             return {
                 ...job,
                 remaining,
@@ -31,8 +34,9 @@ module.exports = {
             }
         })
 
-        const freeHours = profileData['hours-per-day'] - jobTotalHours
+        //this is for the newer jobs to be shown in the top of the page
+        updatedJobs.reverse()   
 
-        return res.render('index', { updatedJobs, profile: profileData, status: statusCount, freeHours })
+        return res.render('index', { updatedJobs, profile: profileData, status: statusCount })
     }
 }
